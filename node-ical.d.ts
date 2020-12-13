@@ -80,12 +80,13 @@ declare module 'node-ical' {
     created: DateWithTimeZone;
     lastmodified: DateWithTimeZone;
     rrule?: RRule;
+    recurrences?: Record<string, VEvent>;
+    recurrenceid: DateWithTimeZone;
+    exdate: DateWithTimeZone[];
 
     // I am not entirely sure about these, leave them as any for now..
     organizer: any;
-    exdate: any;
     geo: any;
-    recurrenceid: any;
   }
 
   export interface BaseComponent {
