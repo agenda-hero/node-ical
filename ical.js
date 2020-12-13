@@ -340,7 +340,7 @@ module.exports = {
 
             object = curr[key];
             if (typeof object === 'string') {
-              delete curr[key];
+              // Delete curr[key];
             }
           }
 
