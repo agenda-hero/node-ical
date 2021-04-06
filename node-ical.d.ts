@@ -1,10 +1,10 @@
-declare module 'node-ical' {
-  import {CoreOptions} from 'request';
-  import {RRule} from 'rrule';
+declare module "node-ical" {
+  import { RequestInit } from "node-fetch";
+  import { RRule } from "rrule";
 
   /**
-     * Methods (Sync)
-     */
+   * Methods (Sync)
+   */
   export interface NodeICalSync {
     parseICS: (body: string) => CalendarResponse;
 
@@ -14,24 +14,36 @@ declare module 'node-ical' {
   export const sync: NodeICalSync;
 
   /**
-     * Methods (Async)
-     */
+   * Methods (Async)
+   */
   export interface NodeICalAsync {
-    fromURL: ((url: string, callback: NodeIcalCallback) => void) & ((url: string, options: CoreOptions | NodeIcalCallback, callback?: NodeIcalCallback) => void) & ((url: string) => Promise<CalendarResponse>);
+    fromURL: ((url: string, callback: NodeIcalCallback) => void) &
+      ((
+        url: string,
+        options: RequestInit | NodeIcalCallback,
+        callback?: NodeIcalCallback
+      ) => void) &
+      ((url: string) => Promise<CalendarResponse>);
 
-    parseICS: ((body: string, callback: NodeIcalCallback) => void) & ((body: string) => Promise<CalendarResponse>);
+    parseICS: ((body: string, callback: NodeIcalCallback) => void) &
+      ((body: string) => Promise<CalendarResponse>);
 
-    parseFile: ((file: string, callback: NodeIcalCallback) => void) & ((file: string) => Promise<CalendarResponse>);
+    parseFile: ((file: string, callback: NodeIcalCallback) => void) &
+      ((file: string) => Promise<CalendarResponse>);
   }
 
   export const async: NodeICalAsync;
 
   /**
-     * Methods (Autodetect)
-     */
+   * Methods (Autodetect)
+   */
   export function fromURL(url: string, callback: NodeIcalCallback): void;
 
-  export function fromURL(url: string, options: CoreOptions | NodeIcalCallback, callback?: NodeIcalCallback): void;
+  export function fromURL(
+    url: string,
+    options: RequestInit | NodeIcalCallback,
+    callback?: NodeIcalCallback
+  ): void;
 
   export function fromURL(url: string): Promise<CalendarResponse>;
 
@@ -44,9 +56,9 @@ declare module 'node-ical' {
   export function parseFile(file: string): CalendarResponse;
 
   /**
-     * Response objects
-     */
-  export type NodeIcalCallback = (err: any, data: CalendarResponse) => void;
+   * Response objects
+   */
+  export type NodeIcalCallback = (error: any, data: CalendarResponse) => void;
 
   export type CalendarResponse = Record<string, CalendarComponent>;
 
@@ -55,7 +67,7 @@ declare module 'node-ical' {
   export type VTimeZone = TimeZoneProps & TimeZoneDictionary;
 
   interface TimeZoneProps extends BaseComponent {
-    type: 'VTIMEZONE';
+    type: "VTIMEZONE";
     tzid: string;
     tzurl: string;
   }
@@ -63,7 +75,7 @@ declare module 'node-ical' {
   type TimeZoneDictionary = Record<string, TimeZoneDef | undefined>;
 
   export interface VEvent extends BaseComponent {
-    type: 'VEVENT';
+    type: "VEVENT";
     dtstamp: DateWithTimeZone;
     uid: string;
     sequence: string;
@@ -94,7 +106,7 @@ declare module 'node-ical' {
   }
 
   export interface TimeZoneDef {
-    type: 'DAYLIGHT' | 'STANDARD';
+    type: "DAYLIGHT" | "STANDARD";
     params: any[];
     tzoffsetfrom: string;
     tzoffsetto: string;
@@ -106,7 +118,7 @@ declare module 'node-ical' {
   }
 
   export type DateWithTimeZone = Date & { tz: string };
-  export type DateType = 'date-time' | 'date';
-  export type Transparency = 'TRANSPARENT' | 'OPAQUE';
-  export type Class = 'PUBLIC' | 'PRIVATE' | 'CONFIDENTIAL';
+  export type DateType = "date-time" | "date";
+  export type Transparency = "TRANSPARENT" | "OPAQUE";
+  export type Class = "PUBLIC" | "PRIVATE" | "CONFIDENTIAL";
 }
