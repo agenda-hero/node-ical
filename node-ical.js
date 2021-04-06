@@ -1,5 +1,5 @@
 const fs = require('fs');
-const request = require('request');
+const fetch = require('node-fetch');
 
 const ical = require('./ical.js');
 
@@ -88,7 +88,7 @@ const autodetect = {};
  * Download an iCal file from the web and parse it.
  *
  * @param {string} url                - URL of file to request.
- * @param {Object|icsCallback} [opts] - Options to pass to request() from npm:request.
+ * @param {Object|icsCallback} [opts] - Options to pass to fetch() from npm:node-fetch.
  *                                      Alternatively you can pass the callback function directly.
  *                                      If no callback is provided a promise will be returned.
  * @param {icsCallback} [cb]          - Callback function.
@@ -98,28 +98,31 @@ const autodetect = {};
  */
 async.fromURL = function (url, options, cb) {
   return promiseCallback((resolve, reject) => {
-    request(url, options, (err, response, data) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      // If (r.statusCode !== 200) {
-      // all ok status codes should be accepted (any 2XX code)
-      if (Math.floor(response.statusCode / 100) !== 2) {
-        reject(new Error(`${response.statusCode} ${response.statusMessage}`));
-        return;
-      }
-
-      ical.parseICS(data, (err, ics) => {
-        if (err) {
-          reject(err);
+    fetch(url, options)
+      .then(response => {
+        // If (response.status !== 200) {
+        // all ok status codes should be accepted (any 2XX code)
+        if (Math.floor(response.status / 100) !== 2) {
+          reject(new Error(`${response.status} ${response.statusText}`));
           return;
         }
 
-        resolve(ics);
+        return response;
+      })
+      .then(response => response.text())
+      .then(data => {
+        ical.parseICS(data, (error, ics) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+
+          resolve(ics);
+        });
+      })
+      .catch(error => {
+        reject(error);
       });
-    });
   }, cb);
 };
 
@@ -134,15 +137,15 @@ async.fromURL = function (url, options, cb) {
  */
 async.parseFile = function (filename, cb) {
   return promiseCallback((resolve, reject) => {
-    fs.readFile(filename, 'utf8', (err, data) => {
-      if (err) {
-        reject(err);
+    fs.readFile(filename, 'utf8', (error, data) => {
+      if (error) {
+        reject(error);
         return;
       }
 
-      ical.parseICS(data, (err, ics) => {
-        if (err) {
-          reject(err);
+      ical.parseICS(data, (error, ics) => {
+        if (error) {
+          reject(error);
           return;
         }
 
@@ -163,9 +166,9 @@ async.parseFile = function (filename, cb) {
  */
 async.parseICS = function (data, cb) {
   return promiseCallback((resolve, reject) => {
-    ical.parseICS(data, (err, ics) => {
-      if (err) {
-        reject(err);
+    ical.parseICS(data, (error, ics) => {
+      if (error) {
+        reject(error);
         return;
       }
 

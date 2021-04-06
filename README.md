@@ -2,7 +2,6 @@
 [![Build](https://github.com/jens-maus/node-ical/workflows/CI/badge.svg)](https://github.com/jens-maus/node-ical/actions)
 [![NPM version](https://img.shields.io/npm/v/node-ical.svg)](https://www.npmjs.com/package/node-ical)
 [![Downloads](https://img.shields.io/npm/dm/node-ical.svg)](https://www.npmjs.com/package/node-ical)
-[![Known Vulnerabilities](https://snyk.io/test/github/jens-maus/node-ical/badge.svg?targetFile=package.json)](https://snyk.io/test/github/jens-maus/node-ical?targetFile=package.json)
 [![Contributors](https://img.shields.io/github/contributors/jens-maus/node-ical.svg)](https://github.com/jens-maus/node-ical/graphs/contributors)
 [![License](https://img.shields.io/github/license/jens-maus/node-ical.svg)](https://github.com/jens-maus/node-ical/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
@@ -87,7 +86,7 @@ const ical = require('node-ical');
 
     // you can also use the async lib to download and parse iCal from the web
     const webEvents = await ical.async.fromURL('http://lanyrd.com/topics/nodejs/nodejs.ics');
-    // also you can pass options to request() (optional though!)
+    // also you can pass options to fetch() (optional though!)
     const headerWebEvents = await ical.async.fromURL(
         'http://lanyrd.com/topics/nodejs/nodejs.ics',
         { headers: { 'User-Agent': 'API-Example / 1.0' } }
@@ -183,7 +182,7 @@ ical.fromURL(url, options, function(err, data) {
 });
 ```
 
-Use the request library to fetch the specified URL (```opts``` gets passed on to the ```request()``` call), and call the function with the result. (either an error or the data)
+Use the node-fetch library to fetch the specified URL (```opts``` gets passed on to the ```fetch()``` call), and call the function with the result. (either an error or the data)
 
 #### Example 1 - Print list of upcoming node conferences (see example.js) (parses the file synchronous)
 ```javascript
